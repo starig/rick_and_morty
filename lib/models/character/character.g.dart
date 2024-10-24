@@ -47,6 +47,7 @@ const _$CharacterStatusEnumMap = {
 const _$CharacterGenderEnumMap = {
   CharacterGender.male: 'Male',
   CharacterGender.female: 'Female',
+  CharacterGender.genderless: 'Genderless',
   CharacterGender.unknown: 'unknown',
 };
 

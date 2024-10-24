@@ -70,9 +70,13 @@ abstract class _HomeStore with Store {
   @action
   Future<void> loadMoreCharacters() async {
     currentPage.value++;
+    if (currentPage.value == totalPages.value) {
+      isAllLoaded.value = true;
+    }
     try {
       loadMoreFuture = ObservableFuture(_getCharactersUseCase.execute(currentPage.value));
       loadMoreResponse = await loadMoreFuture;
+      totalPages.value = charactersResponse!.info.pages;
 
       for (var item in loadMoreResponse!.results) {
         characters = [...characters, item];
@@ -81,9 +85,6 @@ abstract class _HomeStore with Store {
       await getFavoriteCharacters();
     } on DioException catch (error) {
       errorMessage = error.message;
-    }
-    if (currentPage == totalPages) {
-      isAllLoaded.value = true;
     }
   }
 

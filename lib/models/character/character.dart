@@ -20,6 +20,9 @@ enum CharacterGender {
   @JsonValue('Female')
   female,
 
+  @JsonValue('Genderless')
+  genderless,
+
   @JsonValue('unknown')
   unknown,
 }

@@ -25,6 +25,8 @@ String getCharacterGenderIconPath(CharacterGender value) {
       return Assets.images.male.path;
     case CharacterGender.unknown:
       return Assets.images.unknownGender.path;
+    default:
+      return Assets.images.unknownGender.path;
   }
 }
 
