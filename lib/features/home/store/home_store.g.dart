@@ -82,18 +82,22 @@ mixin _$HomeStore on _HomeStore, Store {
     return _$getCharactersAsyncAction.run(() => super.getCharacters());
   }
 
-  late final _$_HomeStoreActionController =
-      ActionController(name: '_HomeStore', context: context);
+  late final _$getFavoriteCharactersAsyncAction =
+      AsyncAction('_HomeStore.getFavoriteCharacters', context: context);
 
   @override
-  dynamic toggleFavoriteCharacter(int id) {
-    final _$actionInfo = _$_HomeStoreActionController.startAction(
-        name: '_HomeStore.toggleFavoriteCharacter');
-    try {
-      return super.toggleFavoriteCharacter(id);
-    } finally {
-      _$_HomeStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> getFavoriteCharacters() {
+    return _$getFavoriteCharactersAsyncAction
+        .run(() => super.getFavoriteCharacters());
+  }
+
+  late final _$toggleFavoriteCharacterAsyncAction =
+      AsyncAction('_HomeStore.toggleFavoriteCharacter', context: context);
+
+  @override
+  Future<void> toggleFavoriteCharacter(int id) {
+    return _$toggleFavoriteCharacterAsyncAction
+        .run(() => super.toggleFavoriteCharacter(id));
   }
 
   @override

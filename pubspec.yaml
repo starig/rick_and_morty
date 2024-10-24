@@ -31,6 +31,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   #ui
   flutter_svg: ^2.0.10+1
+  #database
+  sqflite: ^2.4.0
 
 dev_dependencies:
   flutter_test:

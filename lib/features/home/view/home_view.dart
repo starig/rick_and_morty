@@ -51,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
                       child: RefreshIndicator(
                         onRefresh: () {
                           HapticFeedback.heavyImpact();
-                          return _homeStore.getCharacters();
+                          return _homeStore.getFavoriteCharacters();
                         },
                         child: CustomScrollView(
                           slivers: [
