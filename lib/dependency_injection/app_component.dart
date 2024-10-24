@@ -68,15 +68,15 @@ void _configureUseCases() {
         () => GetCharactersUseCase(rickAndMortyRepository));
 }
 
+_configureStores() {
+  getIt
+    ..registerLazySingleton<DetailsStore>(() => DetailsStore())
+    ..registerLazySingleton<HomeStore>(() => HomeStore());
+}
+
 RickAndMortyApiClient _initRickAndMortyApiClient({required Dio dio, String? url}) {
   if (url != null) {
     return RickAndMortyApiClient(dio, baseUrl: url);
   }
   return RickAndMortyApiClient(dio);
-}
-
-_configureStores() {
-  getIt
-    ..registerLazySingleton<DetailsStore>(() => DetailsStore())
-    ..registerLazySingleton<HomeStore>(() => HomeStore());
 }

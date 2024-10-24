@@ -23,7 +23,7 @@ class _DetailsViewState extends State<DetailsView> {
   final DetailsStore _detailsStore = getIt.get<DetailsStore>();
 
   static const double _leadingWidth = 76;
-  static const double _leadingPadding = 20;
+  static const double _horizontalPadding = 20;
   static const double _expandedHeight = 260;
   static const double _loaderSize = 40;
 
@@ -52,7 +52,7 @@ class _DetailsViewState extends State<DetailsView> {
                     SliverAppBar(
                       leadingWidth: _leadingWidth,
                       leading: const Padding(
-                        padding: EdgeInsets.only(left: _leadingPadding),
+                        padding: EdgeInsets.only(left: _horizontalPadding),
                         child: CircleBackButton(),
                       ),
                       expandedHeight: _expandedHeight,
@@ -108,29 +108,32 @@ class _DetailsViewState extends State<DetailsView> {
                         ],
                       ),
                     ),
-                    SliverList.list(
-                      children: [
-                        DetailsItem(
-                          iconPath: Assets.images.information.path,
-                          label: 'Name',
-                          value: character.name.toLabelCase(),
-                        ),
-                        DetailsItem(
-                          iconPath: getCharacterStatusIconPath(character.status),
-                          label: 'Status',
-                          value: character.status.name.toLabelCase(),
-                        ),
-                        DetailsItem(
-                          iconPath: getCharacterSpeciesIconPath(character.species),
-                          label: 'Species',
-                          value: character.species.name.toLabelCase(),
-                        ),
-                        DetailsItem(
-                          iconPath: getCharacterGenderIconPath(character.gender),
-                          label: 'Gender',
-                          value: character.gender.name.toLabelCase(),
-                        ),
-                      ],
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      sliver: SliverList.list(
+                        children: [
+                          DetailsItem(
+                            iconPath: Assets.images.information.path,
+                            label: 'Name',
+                            value: character.name.toLabelCase(),
+                          ),
+                          DetailsItem(
+                            iconPath: getCharacterStatusIconPath(character.status),
+                            label: 'Status',
+                            value: character.status.name.toLabelCase(),
+                          ),
+                          DetailsItem(
+                            iconPath: getCharacterSpeciesIconPath(character.species),
+                            label: 'Species',
+                            value: character.species.name.toLabelCase(),
+                          ),
+                          DetailsItem(
+                            iconPath: getCharacterGenderIconPath(character.gender),
+                            label: 'Gender',
+                            value: character.gender.name.toLabelCase(),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 );

@@ -14,12 +14,14 @@ import 'package:rick_and_morty/models/character/character.dart';
 class CharacterCard extends StatelessWidget {
   static const double _borderRadius = 20;
   static const double _likeContainerSize = 30;
+  static const double _loaderSize = 40;
+  static const double _iconSize = 20;
 
   final Character character;
 
-  CharacterCard({super.key, required this.character});
-
   final HomeStore _homeStore = getIt.get<HomeStore>();
+
+  CharacterCard({super.key, required this.character});
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +66,8 @@ class CharacterCard extends StatelessWidget {
                               width: 160,
                               height: 160,
                               child: SizedBox(
-                                height: 40,
-                                width: 40,
+                                height: _loaderSize,
+                                width: _loaderSize,
                                 child: Center(
                                   child: CircularProgressIndicator(),
                                 ),
@@ -85,8 +87,8 @@ class CharacterCard extends StatelessWidget {
                               width: 160,
                               height: 160,
                               child: SizedBox(
-                                height: 40,
-                                width: 40,
+                                height: _loaderSize,
+                                width: _loaderSize,
                                 child: Center(
                                   child: CircularProgressIndicator(
                                     value: loadingProgress.expectedTotalBytes != null
@@ -120,8 +122,8 @@ class CharacterCard extends StatelessWidget {
                                 _homeStore.favoriteCharacters.contains(character.id)
                                     ? Assets.images.liked.path
                                     : Assets.images.unliked.path,
-                                width: 20,
-                                height: 20,
+                                width: _iconSize,
+                                height: _iconSize,
                               ),
                             ),
                           ),
@@ -137,6 +139,7 @@ class CharacterCard extends StatelessWidget {
                   ),
                   child: Text(
                     character.name,
+                    overflow: TextOverflow.ellipsis,
                     style: FontStyles.bodyBold,
                   ),
                 ),

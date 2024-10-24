@@ -11,7 +11,7 @@ class AppRoutes {
 class AppRouterHelper {
   static final AppRouterHelper _instance = AppRouterHelper._internal();
 
-  static late final router;
+  static late final GoRouter router;
 
   static final GlobalKey<NavigatorState> parentNavigatorKey = GlobalKey<NavigatorState>();
 

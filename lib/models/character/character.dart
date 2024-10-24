@@ -68,10 +68,8 @@ class Character {
     required this.created,
   });
 
-  /// Connect the generated function to parse from JSON
   factory Character.fromJson(Map<String, dynamic> json) => _$CharacterFromJson(json);
 
-  /// Connect the generated function to convert to JSON
   Map<String, dynamic> toJson() => _$CharacterToJson(this);
 }
 

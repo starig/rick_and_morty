@@ -21,9 +21,6 @@ abstract class _DetailsStore with Store {
   @observable
   String? errorMessage;
 
-  // @observable
-  // Observable<Character>? character;
-
   @action
   Future<void> getCharacterDetails(String id) async {
     try {
