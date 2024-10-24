@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -54,6 +52,21 @@ class _HomeViewState extends State<HomeView> {
                 if (_homeStore.charactersResponseFuture?.status == FutureStatus.pending &&
                     _homeStore.charactersResponse?.results == null) {
                   return const Center(child: CircularProgressIndicator());
+                } else if (_homeStore.errorMessage != null) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Network error...'),
+                        TextButton(
+                          onPressed: () async {
+                            await _homeStore.getCharacters();
+                          },
+                          child: const Text("Try again"),
+                        ),
+                      ],
+                    ),
+                  );
                 } else if (_homeStore.charactersResponse != null) {
                   return SafeArea(
                     bottom: false,
@@ -90,8 +103,6 @@ class _HomeViewState extends State<HomeView> {
                                   child: CircularProgressIndicator(),
                                 ),
                               ),
-                            if (_homeStore.errorMessage != null)
-                              Center(child: Text('Error: ${_homeStore.errorMessage}')),
                           ],
                         ),
                       ),

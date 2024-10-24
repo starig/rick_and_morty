@@ -61,6 +61,7 @@ abstract class _HomeStore with Store {
       charactersResponse = await charactersResponseFuture;
       characters = charactersResponse!.results;
       totalPages.value = charactersResponse!.info.pages;
+      errorMessage = null;
       await getFavoriteCharacters();
     } on DioException catch (error) {
       errorMessage = error.message;

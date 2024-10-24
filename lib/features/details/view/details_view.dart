@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobx/mobx.dart';
 import 'package:rick_and_morty/config/helpers.dart';
 import 'package:rick_and_morty/dependency_injection/app_component.dart';
@@ -42,9 +43,33 @@ class _DetailsViewState extends State<DetailsView> {
           return Observer(
             builder: (_) {
               if (_detailsStore.characterDetailsResponseFuture?.status == FutureStatus.pending) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               } else if (_detailsStore.errorMessage != null) {
-                return Center(child: Text('Error: ${_detailsStore.errorMessage}'));
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Network error...'),
+                        TextButton(
+                          onPressed: () async {
+                            await _detailsStore.getCharacterDetails(widget.id.toString());
+                          },
+                          child: const Text("Try again"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          child: Text("Go back"),
+                        )
+                      ],
+                    ),
+                  ),
+                );
               } else if (_detailsStore.characterDetails != null) {
                 final Character character = _detailsStore.characterDetails!;
                 return CustomScrollView(
