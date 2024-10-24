@@ -2,16 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'character.g.dart';
 
-// enum CharacterStatus {
-//   alive('Alive'),
-//   dead('Dead'),
-//   unknown('Unknown');
-//
-//   final String value;
-//
-//   const CharacterStatus(this.value);
-// }
-
 enum CharacterStatus {
   @JsonValue('Alive')
   alive,
@@ -40,6 +30,8 @@ enum CharacterSpecies {
 
   @JsonValue('Alien')
   alien,
+
+  other
 }
 
 @JsonSerializable()
@@ -47,6 +39,7 @@ class Character {
   final int id;
   final String name;
   final CharacterStatus status;
+  @CharacterSpeciesConverter()
   final CharacterSpecies species;
   final String type;
   final CharacterGender gender;
@@ -107,4 +100,25 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
+}
+
+class CharacterSpeciesConverter implements JsonConverter<CharacterSpecies, String> {
+  const CharacterSpeciesConverter();
+
+  @override
+  CharacterSpecies fromJson(String json) {
+    switch (json) {
+      case 'Human':
+        return CharacterSpecies.human;
+      case 'Alien':
+        return CharacterSpecies.alien;
+      default:
+        return CharacterSpecies.other;
+    }
+  }
+
+  @override
+  String toJson(CharacterSpecies object) {
+    return object.name;
+  }
 }

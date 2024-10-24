@@ -10,7 +10,8 @@ Character _$CharacterFromJson(Map<String, dynamic> json) => Character(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       status: $enumDecode(_$CharacterStatusEnumMap, json['status']),
-      species: $enumDecode(_$CharacterSpeciesEnumMap, json['species']),
+      species:
+          const CharacterSpeciesConverter().fromJson(json['species'] as String),
       type: json['type'] as String,
       gender: $enumDecode(_$CharacterGenderEnumMap, json['gender']),
       origin: Origin.fromJson(json['origin'] as Map<String, dynamic>),
@@ -26,7 +27,7 @@ Map<String, dynamic> _$CharacterToJson(Character instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'status': _$CharacterStatusEnumMap[instance.status]!,
-      'species': _$CharacterSpeciesEnumMap[instance.species]!,
+      'species': const CharacterSpeciesConverter().toJson(instance.species),
       'type': instance.type,
       'gender': _$CharacterGenderEnumMap[instance.gender]!,
       'origin': instance.origin,
@@ -41,11 +42,6 @@ const _$CharacterStatusEnumMap = {
   CharacterStatus.alive: 'Alive',
   CharacterStatus.dead: 'Dead',
   CharacterStatus.unknown: 'unknown',
-};
-
-const _$CharacterSpeciesEnumMap = {
-  CharacterSpecies.human: 'Human',
-  CharacterSpecies.alien: 'Alien',
 };
 
 const _$CharacterGenderEnumMap = {

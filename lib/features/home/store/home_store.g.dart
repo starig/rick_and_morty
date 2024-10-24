@@ -26,6 +26,38 @@ mixin _$HomeStore on _HomeStore, Store {
     });
   }
 
+  late final _$loadMoreFutureAtom =
+      Atom(name: '_HomeStore.loadMoreFuture', context: context);
+
+  @override
+  ObservableFuture<CharacterResponse?>? get loadMoreFuture {
+    _$loadMoreFutureAtom.reportRead();
+    return super.loadMoreFuture;
+  }
+
+  @override
+  set loadMoreFuture(ObservableFuture<CharacterResponse?>? value) {
+    _$loadMoreFutureAtom.reportWrite(value, super.loadMoreFuture, () {
+      super.loadMoreFuture = value;
+    });
+  }
+
+  late final _$loadMoreResponseAtom =
+      Atom(name: '_HomeStore.loadMoreResponse', context: context);
+
+  @override
+  CharacterResponse? get loadMoreResponse {
+    _$loadMoreResponseAtom.reportRead();
+    return super.loadMoreResponse;
+  }
+
+  @override
+  set loadMoreResponse(CharacterResponse? value) {
+    _$loadMoreResponseAtom.reportWrite(value, super.loadMoreResponse, () {
+      super.loadMoreResponse = value;
+    });
+  }
+
   late final _$charactersResponseAtom =
       Atom(name: '_HomeStore.charactersResponse', context: context);
 
@@ -39,6 +71,22 @@ mixin _$HomeStore on _HomeStore, Store {
   set charactersResponse(CharacterResponse? value) {
     _$charactersResponseAtom.reportWrite(value, super.charactersResponse, () {
       super.charactersResponse = value;
+    });
+  }
+
+  late final _$charactersAtom =
+      Atom(name: '_HomeStore.characters', context: context);
+
+  @override
+  List<Character> get characters {
+    _$charactersAtom.reportRead();
+    return super.characters;
+  }
+
+  @override
+  set characters(List<Character> value) {
+    _$charactersAtom.reportWrite(value, super.characters, () {
+      super.characters = value;
     });
   }
 
@@ -74,12 +122,69 @@ mixin _$HomeStore on _HomeStore, Store {
     });
   }
 
+  late final _$currentPageAtom =
+      Atom(name: '_HomeStore.currentPage', context: context);
+
+  @override
+  Observable<int> get currentPage {
+    _$currentPageAtom.reportRead();
+    return super.currentPage;
+  }
+
+  @override
+  set currentPage(Observable<int> value) {
+    _$currentPageAtom.reportWrite(value, super.currentPage, () {
+      super.currentPage = value;
+    });
+  }
+
+  late final _$isAllLoadedAtom =
+      Atom(name: '_HomeStore.isAllLoaded', context: context);
+
+  @override
+  Observable<bool> get isAllLoaded {
+    _$isAllLoadedAtom.reportRead();
+    return super.isAllLoaded;
+  }
+
+  @override
+  set isAllLoaded(Observable<bool> value) {
+    _$isAllLoadedAtom.reportWrite(value, super.isAllLoaded, () {
+      super.isAllLoaded = value;
+    });
+  }
+
+  late final _$totalPagesAtom =
+      Atom(name: '_HomeStore.totalPages', context: context);
+
+  @override
+  Observable<int> get totalPages {
+    _$totalPagesAtom.reportRead();
+    return super.totalPages;
+  }
+
+  @override
+  set totalPages(Observable<int> value) {
+    _$totalPagesAtom.reportWrite(value, super.totalPages, () {
+      super.totalPages = value;
+    });
+  }
+
   late final _$getCharactersAsyncAction =
       AsyncAction('_HomeStore.getCharacters', context: context);
 
   @override
   Future<void> getCharacters() {
     return _$getCharactersAsyncAction.run(() => super.getCharacters());
+  }
+
+  late final _$loadMoreCharactersAsyncAction =
+      AsyncAction('_HomeStore.loadMoreCharacters', context: context);
+
+  @override
+  Future<void> loadMoreCharacters() {
+    return _$loadMoreCharactersAsyncAction
+        .run(() => super.loadMoreCharacters());
   }
 
   late final _$getFavoriteCharactersAsyncAction =
@@ -104,9 +209,15 @@ mixin _$HomeStore on _HomeStore, Store {
   String toString() {
     return '''
 charactersResponseFuture: ${charactersResponseFuture},
+loadMoreFuture: ${loadMoreFuture},
+loadMoreResponse: ${loadMoreResponse},
 charactersResponse: ${charactersResponse},
+characters: ${characters},
 errorMessage: ${errorMessage},
-favoriteCharacters: ${favoriteCharacters}
+favoriteCharacters: ${favoriteCharacters},
+currentPage: ${currentPage},
+isAllLoaded: ${isAllLoaded},
+totalPages: ${totalPages}
     ''';
   }
 }

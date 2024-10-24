@@ -6,9 +6,9 @@ class GetCharactersUseCase {
 
   GetCharactersUseCase(this._rickAndMortyRepository);
 
-  Future<CharacterResponse> execute() async {
+  Future<CharacterResponse> execute(int page) async {
     try {
-      final response = await _rickAndMortyRepository.getCharacters();
+      final response = await _rickAndMortyRepository.getCharacters(page);
       return response;
     } catch (e) {
       rethrow;

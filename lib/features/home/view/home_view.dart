@@ -7,7 +7,7 @@ import 'package:rick_and_morty/features/home/components/character_card.dart';
 import 'package:rick_and_morty/features/home/store/home_store.dart';
 
 class HomeView extends StatefulWidget {
-  HomeView({super.key});
+  const HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -16,6 +16,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late final Future _getCharactersFuture;
   final HomeStore _homeStore = getIt.get<HomeStore>();
+  final ScrollController _scrollController = ScrollController();
 
   static const double _borderRadius = 20;
   static const double _horizontalGap = 20;
@@ -23,8 +24,21 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
+    _scrollController.addListener(() async {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        if (!_homeStore.isAllLoaded.value) {
+          await _homeStore.loadMoreCharacters();
+        }
+      }
+    });
     _getCharactersFuture = _homeStore.getCharacters();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,10 +52,7 @@ class _HomeViewState extends State<HomeView> {
                 if (_homeStore.charactersResponseFuture?.status == FutureStatus.pending &&
                     _homeStore.charactersResponse?.results == null) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (_homeStore.errorMessage != null) {
-                  return Center(child: Text('Error: ${_homeStore.errorMessage}'));
                 } else if (_homeStore.charactersResponse != null) {
-                  final characters = _homeStore.charactersResponse!.results;
                   return SafeArea(
                     bottom: false,
                     child: Padding(
@@ -49,19 +60,20 @@ class _HomeViewState extends State<HomeView> {
                         horizontal: _borderRadius,
                       ),
                       child: RefreshIndicator(
-                        onRefresh: () {
+                        onRefresh: () async {
                           HapticFeedback.heavyImpact();
-                          return _homeStore.getFavoriteCharacters();
+                          return _homeStore.getCharacters();
                         },
                         child: CustomScrollView(
+                          controller: _scrollController,
                           slivers: [
                             SliverGrid(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                                  final character = characters[index];
+                                  final character = _homeStore.characters[index];
                                   return CharacterCard(character: character);
                                 },
-                                childCount: characters.length,
+                                childCount: _homeStore.characters.length,
                               ),
                               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                                 maxCrossAxisExtent: 200,
@@ -70,6 +82,14 @@ class _HomeViewState extends State<HomeView> {
                                 childAspectRatio: 160 / 215,
                               ),
                             ),
+                            if (_homeStore.loadMoreFuture?.status == FutureStatus.pending)
+                              const SliverToBoxAdapter(
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            if (_homeStore.errorMessage != null)
+                              Center(child: Text('Error: ${_homeStore.errorMessage}')),
                           ],
                         ),
                       ),

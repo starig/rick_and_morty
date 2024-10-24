@@ -34,6 +34,8 @@ String getCharacterSpeciesIconPath(CharacterSpecies value) {
       return Assets.images.human.path;
     case CharacterSpecies.alien:
       return Assets.images.alien.path;
+    default:
+      return Assets.images.alien.path;
   }
 }
 

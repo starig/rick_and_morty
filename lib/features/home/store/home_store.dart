@@ -7,6 +7,7 @@ import 'package:rick_and_morty/domain/use_cases/add_to_favorite_characters_use_c
 import 'package:rick_and_morty/domain/use_cases/delete_favorite_character_use_case.dart';
 import 'package:rick_and_morty/domain/use_cases/get_characters_use_case.dart';
 import 'package:rick_and_morty/domain/use_cases/get_favorite_characters_use_case.dart';
+import 'package:rick_and_morty/models/character/character.dart';
 import 'package:rick_and_morty/models/character_response/character_response.dart';
 
 part 'home_store.g.dart';
@@ -26,7 +27,16 @@ abstract class _HomeStore with Store {
   ObservableFuture<CharacterResponse?>? charactersResponseFuture;
 
   @observable
+  ObservableFuture<CharacterResponse?>? loadMoreFuture;
+
+  @observable
+  CharacterResponse? loadMoreResponse;
+
+  @observable
   CharacterResponse? charactersResponse;
+
+  @observable
+  List<Character> characters = ObservableList<Character>.of([]);
 
   @observable
   String? errorMessage;
@@ -34,14 +44,46 @@ abstract class _HomeStore with Store {
   @observable
   ObservableList<int> favoriteCharacters = ObservableList<int>.of([]);
 
+  @observable
+  Observable<int> currentPage = Observable<int>(1);
+
+  @observable
+  Observable<bool> isAllLoaded = Observable<bool>(false);
+
+  @observable
+  Observable<int> totalPages = Observable<int>(0);
+
   @action
   Future<void> getCharacters() async {
+    currentPage.value = 1;
     try {
-      charactersResponseFuture = ObservableFuture(_getCharactersUseCase.execute());
+      charactersResponseFuture = ObservableFuture(_getCharactersUseCase.execute(currentPage.value));
       charactersResponse = await charactersResponseFuture;
+      characters = charactersResponse!.results;
+      totalPages.value = charactersResponse!.info.pages;
       await getFavoriteCharacters();
     } on DioException catch (error) {
       errorMessage = error.message;
+    }
+  }
+
+  @action
+  Future<void> loadMoreCharacters() async {
+    currentPage.value++;
+    try {
+      loadMoreFuture = ObservableFuture(_getCharactersUseCase.execute(currentPage.value));
+      loadMoreResponse = await loadMoreFuture;
+
+      for (var item in loadMoreResponse!.results) {
+        characters = [...characters, item];
+      }
+
+      await getFavoriteCharacters();
+    } on DioException catch (error) {
+      errorMessage = error.message;
+    }
+    if (currentPage == totalPages) {
+      isAllLoaded.value = true;
     }
   }
 
